@@ -1,0 +1,38 @@
+import os 
+
+
+
+
+env = Environment()
+include = Dir('#/include')
+googleMock = Dir('/usr/local/include')
+env = Environment(
+    CPPPATH=['/usr/include/qt5', '.', '#/ui'],
+    QT_CPPPATH='/usr/include/qt5',
+    QT_LIB='qt-mt',
+    QT_LIBPATH='/usr/lib64/qt5/',
+    QT_BINPATH='/usr/lib64/qt5/bin',
+    QT_UICCOM = [ ['$QT_UIC', '$QT_UICDECLFLAGS', '-o', '${TARGETS[0]}', '$SOURCE'],
+            ['$QT_UIC', '$QT_UICIMPLFLAGS', '', '', '-o', '${TARGETS[1]}', '$SOURCE'],
+           ['$QT_MOC', '$QT_MOCFROMHFLAGS', '-o', '${TARGETS[2]}', '${TARGETS[0]}']],
+    tools= ['default', 'qt'],
+    LIBS=['gmock', 'gtest', 'pthread', 'Qt5Widgets', 'Qt5Gui', 'Qt5Core'],
+    CCFLAGS='-ggdb -fPIC -std=c++11 -Wl,rpath=./',
+    LIBPATH=['/usr/local/lib'])
+
+      
+
+try:
+    env.ParseConfig("root-config --cflags --libs")
+except:
+    env.PrependENVPath('PATH','~/root/bin')
+
+    env.ParseConfig("root-config --cflags --libs")
+
+
+
+cintBuilder = Builder(action = 'rootcint -f $TARGET -c $SOURCES')
+
+mockTest = env.Program('mock', ['mock.cc', 'tests.cc', 'QRootCanvas.cc', 'myFrame.cc', 'kFrame.cc', '#/ui/KeyFrame.ui', '#/ui/myframe.ui'])
+
+
