@@ -6,7 +6,7 @@
 #include <QtGui/QPaintEvent>
 #include <QtGui/QResizeEvent>
 #include <QtGui/QMouseEvent>
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QMessageBox>
 
 
 
